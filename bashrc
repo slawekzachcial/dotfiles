@@ -4,6 +4,9 @@ umask 022
 set -o vi
 export EDITOR=vim
 
+# Export TERM to have Tmux properly handle Base16 colors
+export TERM=xterm-256color
+
 # See /usr/lib/git-core/git-sh-prompt for details
 export PROMPT_COMMAND='GIT_PS1_SHOWUPSTREAM=verbose GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWSTASHSTATE=1 GIT_PS1_SHOWCOLORHINTS=1 __git_ps1 "\n\[\033[01;34m\]\w\[\033[00m\]" "\n\$ "'
 
@@ -55,10 +58,10 @@ if [ -f ~/.vim/bundle/fzf/shell/key-bindings.bash ]; then
 fi
 
 # Base16 Shell
-BASE16_SHELL="${HOME}/.dotfiles/base16-shell/"
-[ -n "$PS1" ] && \
-    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-    eval "$("$BASE16_SHELL/profile_helper.sh")"
+export BASE16_THEME=base16-default
+if [ -f ~/.dotfiles/base16-shell/scripts/${BASE16_THEME}-dark.sh ]; then
+    . ~/.dotfiles/base16-shell/scripts/${BASE16_THEME}-dark.sh
+fi
 
 # launch tmux if not already in
-# [ -n "$TMUX" ] || exec tmux new-session -A -s Tmux
+[ -n "$TMUX" ] || exec tmux -u new-session -A -s Tmux
