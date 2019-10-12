@@ -4,7 +4,9 @@ Set of dotfiles to set up:
 * Bash
 * Vim
 * Tmux
-* Base16 color theme for shell and Vim
+* [Base16](https://github.com/chriskempson/base16-shell) color theme for shell and Vim
+* [Fuzzy Finder](https://github.com/junegunn/fzf) (fzf)
+* [The Silver Searcher](https://github.com/ggreer/the_silver_searcher) (ag)
 
 To install it, run the following commands:
 
