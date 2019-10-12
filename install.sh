@@ -7,15 +7,22 @@ readonly INSTALL_SCRIPT="$(readlink --canonicalize "$0")"
 readonly DOTFILES="${INSTALL_SCRIPT%/*}"
 readonly NOW="$(date --utc +"%Y%m%d%H%M%Sutc")"
 
-which git &>/dev/null || { echo "ERROR: git command not found" 1>&2; exit 1; }
-which tmux &>/dev/null || { echo "ERROR: tmux command not found" 1>&2; exit 1; }
-which curl &>/dev/null || { echo "ERROR: curl command not found" 1>&2; exit 1; }
 
-[ -f /usr/share/bash-completion/bash_completion ] \
-    || [ -f /etc/bash_completion ] \
-    || echo "WARNING: bash-completion not installed" 1>&2
-which ag &>/dev/null || echo "WARNING: the silver searcher (ag) command not found" 1>&2
-which fzf &>/dev/null || echo "WARNING: fzf command not found" 1>&2
+apt update
+
+# Note: fzf is only present in Ubunut 19.04 or later. On 18.04 (lts) it needs
+# to be installed from git as documented in fzf github repository.
+apt install --yes git curl tmux vim bash-completion silversearcher-ag fzf
+
+# which git &>/dev/null || { echo "ERROR: git command not found" 1>&2; exit 1; }
+# which tmux &>/dev/null || { echo "ERROR: tmux command not found" 1>&2; exit 1; }
+# which curl &>/dev/null || { echo "ERROR: curl command not found" 1>&2; exit 1; }
+
+# [ -f /usr/share/bash-completion/bash_completion ] \
+#     || [ -f /etc/bash_completion ] \
+#     || echo "WARNING: bash-completion not installed" 1>&2
+# which ag &>/dev/null || echo "WARNING: the silver searcher (ag) command not found" 1>&2
+# which fzf &>/dev/null || echo "WARNING: fzf command not found" 1>&2
 
 echo "Getting Base16 color theme..."
 if [ -d "${DOTFILES}/base16-shell" ]; then
