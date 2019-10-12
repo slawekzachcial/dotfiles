@@ -7,8 +7,22 @@ export EDITOR=vim
 # Export TERM to have Tmux properly handle Base16 colors
 export TERM=xterm-256color
 
-# See /usr/lib/git-core/git-sh-prompt for details
-export PROMPT_COMMAND='GIT_PS1_SHOWUPSTREAM=verbose GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWSTASHSTATE=1 GIT_PS1_SHOWCOLORHINTS=1 __git_ps1 "\n\[\033[01;34m\]\w\[\033[00m\]" "\n\$ "'
+function __prompt_command {
+    local lastExitCode=$?
+    if [ "${lastExitCode}" -eq 0 ]; then
+        local cmdPs1="\$"
+    else
+        local cmdPs1="\[\033[0;31m\](${lastExitCode})\[\033[00m\] \$"
+    fi
+
+    # See /usr/lib/git-core/git-sh-prompt for details about __git_ps1
+    export GIT_PS1_SHOWUPSTREAM=verbose
+    export GIT_PS1_SHOWDIRTYSTATE=1
+    export GIT_PS1_SHOWSTASHSTATE=1
+    export GIT_PS1_SHOWCOLORHINTS=1
+    __git_ps1 "\n\[\033[01;34m\]\w\[\033[00m\]" "\n${cmdPs1} "
+}
+export PROMPT_COMMAND=__prompt_command
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
