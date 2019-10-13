@@ -66,9 +66,11 @@ if ! shopt -oq posix; then
     fi
 fi
 
-# FZF key bindings - must start VIM once so that fzf plugin gets installed
-if [ -f ~/.vim/bundle/fzf/shell/key-bindings.bash ]; then
-    . ~/.vim/bundle/fzf/shell/key-bindings.bash
+# FZF
+if [ -d ~/.fzf ]; then
+    export PATH="${PATH}:${HOME}/.fzf/bin"
+    . ~/.fzf/shell/completion.bash
+    . ~/.fzf/shell/key-bindings.bash
 fi
 
 # Base16 Shell
