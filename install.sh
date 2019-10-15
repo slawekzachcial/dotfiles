@@ -20,9 +20,9 @@ ${APT} install --yes git curl tmux vim bash-completion silversearcher-ag
 # Installing it 'manually'
 echo "Getting FZF..."
 if [ -d "${HOME}/.fzf" ]; then
-    (cd "${HOME}/.fzf" && git pull && ./install --bin)
+    (cd "${HOME}/.fzf" && git pull --depth 1 && ./install --bin)
 else
-    git clone https://github.com/junegunn/fzf.git "${HOME}/.fzf"
+    git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf"
     "${HOME}/.fzf/install" --bin
 fi
 
