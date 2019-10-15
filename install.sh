@@ -7,10 +7,14 @@ readonly INSTALL_SCRIPT="$(readlink --canonicalize "$0")"
 readonly DOTFILES="${INSTALL_SCRIPT%/*}"
 readonly NOW="$(date --utc +"%Y%m%d%H%M%Sutc")"
 
+APT="apt"
+if [ "$(id -u)" -ne 0 ]; then
+    APT="sudo apt"
+fi
 
-apt update
+${APT} update
 
-apt install --yes git curl tmux vim bash-completion silversearcher-ag
+${APT} install --yes git curl tmux vim bash-completion silversearcher-ag
 
 # FZF is only present in Ubuntu 19.04 or later, and so not available in 18.04 LTS.
 # Installing it 'manually'
