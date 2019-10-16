@@ -1,6 +1,6 @@
 # Dotfiles for Terminal-only Environment
 
-![Screenshot](_in_action.png)
+![Screenshot](in_action.png)
 
 Set of dotfiles to set up:
 * Bash
