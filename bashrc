@@ -9,10 +9,9 @@ export TERM=xterm-256color
 
 function __prompt_command {
     local lastExitCode=$?
-    if [ "${lastExitCode}" -eq 0 ]; then
-        local cmdPs1="\$"
-    else
-        local cmdPs1="\[\033[0;31m\](${lastExitCode})\[\033[00m\] \$"
+    local ps1ExitCode=""
+    if [ "${lastExitCode}" -ne 0 ]; then
+        ps1ExitCode="\[\033[0;31m\](${lastExitCode})\[\033[00m\]"
     fi
 
     # See /usr/lib/git-core/git-sh-prompt for details about __git_ps1
@@ -20,7 +19,7 @@ function __prompt_command {
     export GIT_PS1_SHOWDIRTYSTATE=1
     export GIT_PS1_SHOWSTASHSTATE=1
     export GIT_PS1_SHOWCOLORHINTS=1
-    __git_ps1 "\n\[\033[01;34m\]\w\[\033[00m\]" "\n${cmdPs1} "
+    __git_ps1 "\n\[\033[01;34m\]\w\[\033[00m\]" "\n${ps1ExitCode} \$ "
 }
 export PROMPT_COMMAND=__prompt_command
 

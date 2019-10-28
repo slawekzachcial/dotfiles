@@ -1,0 +1,4 @@
+set editing-mode vi
+set completion-ignore-case on
+set blink-matching-paren on
+set show-mode-in-prompt on
