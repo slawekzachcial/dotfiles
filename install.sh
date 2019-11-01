@@ -3,18 +3,36 @@
 set -o errexit -o pipefail
 shopt -s failglob nullglob
 
-readonly INSTALL_SCRIPT="$(readlink --canonicalize "$0")"
+# readlink on MacOS does not support --canonicalize option.
+# MacOS requires greadlink that can be installed with "brew install coreutils."
+function __readlink {
+    if ! readlink "$@" 2>/dev/null && ! greadlink "$@" 2>/dev/null; then
+        echo "ERROR: readlink error (Linux) or greadlink not found or error (MacOS); arguments: $@" 1>&2
+        exit 1
+    fi
+}
+
+export -f __readlink
+
+readonly INSTALL_SCRIPT="$(__readlink --canonicalize "$0")"
 readonly DOTFILES="${INSTALL_SCRIPT%/*}"
 readonly NOW="$(date --utc +"%Y%m%d%H%M%Sutc")"
 
-APT="apt"
-if [ "$(id -u)" -ne 0 ]; then
-    APT="sudo apt"
+# Run 'apt' only on Ubuntu. On other platforms tools need to be installed manually.
+if grep --quiet --ignore-case ubuntu /etc/lsb-release 2>/dev/null; then
+    APT="apt"
+    if [ "$(id -u)" -ne 0 ]; then
+        APT="sudo apt"
+    fi
+
+    ${APT} update
+    ${APT} install --yes git curl tmux vim bash-completion silversearcher-ag
 fi
 
-${APT} update
-
-${APT} install --yes git curl tmux vim bash-completion silversearcher-ag
+which git   &>/dev/null || { echo "ERROR: git not found!" 1>&2; exit 1; }
+which curl  &>/dev/null || { echo "ERROR: curl not found!" 1>&2; exit 1; }
+which tmux  &>/dev/null || { echo "ERROR: tmux not found!" 1>&2; exit 1; }
+which ag    &>/dev/null || { echo "WARNING: ag not found!" 1>&2; }
 
 # FZF is only present in Ubuntu 19.04 or later, and so not available in 18.04 LTS.
 # Installing it 'manually'
@@ -40,7 +58,7 @@ for dotfile in bashrc vimrc tmux.conf inputrc; do
             echo "${HOME}/.${dotfile} already symlinked to ${DOTFILES}/${dotfile}"
             continue
         else
-            echo "ERROR: ${HOME}/.${dotfile} is a symlink of $(readline --canonicalize "${HOME}/.${dotfile}")" 1>&2
+            echo "ERROR: ${HOME}/.${dotfile} is a symlink of $(__readlink --canonicalize "${HOME}/.${dotfile}")" 1>&2
             exit 2
         fi
     elif [ -f "${HOME}/.${dotfile}" ]; then
