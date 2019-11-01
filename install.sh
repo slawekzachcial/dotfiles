@@ -16,7 +16,8 @@ export -f __readlink
 
 readonly INSTALL_SCRIPT="$(__readlink --canonicalize "$0")"
 readonly DOTFILES="${INSTALL_SCRIPT%/*}"
-readonly NOW="$(date --utc +"%Y%m%d%H%M%Sutc")"
+# Use '-u' instead of '--utc' as it works on both Linux and Macos
+readonly NOW="$(date -u +"%Y%m%d%H%M%Sutc")"
 
 # Run 'apt' only on Ubuntu. On other platforms tools need to be installed manually.
 if grep --quiet --ignore-case ubuntu /etc/lsb-release 2>/dev/null; then
