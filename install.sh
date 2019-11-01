@@ -72,5 +72,6 @@ for dotfile in bashrc vimrc tmux.conf inputrc; do
         fi
     fi
 
-    ln --symbolic --relative "${DOTFILES}/${dotfile}" "${HOME}/.${dotfile}"
+    ln --symbolic --relative "${DOTFILES}/${dotfile}" "${HOME}/.${dotfile}" 2>/dev/null \
+	    || ln -s "${DOTFILES}/${dotfile}" "${HOME}/.${dotfile}"
 done
