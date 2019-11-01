@@ -19,7 +19,7 @@ function __prompt_command {
     export GIT_PS1_SHOWDIRTYSTATE=1
     export GIT_PS1_SHOWSTASHSTATE=1
     export GIT_PS1_SHOWCOLORHINTS=1
-    __git_ps1 "\n\[\033[01;34m\]\w\[\033[00m\]" "\n${ps1ExitCode} \$ "
+    __git_ps1 "\n\[\033[01;34m\]\w\[\033[00m\]" "\n${ps1ExitCode}\$ "
 }
 export PROMPT_COMMAND=__prompt_command
 
