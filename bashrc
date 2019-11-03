@@ -7,6 +7,8 @@ export EDITOR=vim
 # Export TERM to have Tmux properly handle Base16 colors
 export TERM=xterm-256color
 
+export LC_ALL="en_US.UTF-8"
+
 function __prompt_command {
     local lastExitCode=$?
     local ps1ExitCode=""
@@ -43,7 +45,7 @@ shopt -s checkwinsize
 shopt -s globstar
 
 # make less more friendly for non-text input files, see lesspipe(1)
-eval "$(SHELL=/bin/sh lesspipe)"
+eval "$(SHELL=/bin/sh lesspipe 2>/dev/null || SHELL=/bin/sh lesspipe.sh)"
 
 # enable color support of ls and also add handy aliases
 alias ls='ls --color=auto'
@@ -62,6 +64,8 @@ if ! shopt -oq posix; then
         . /usr/share/bash-completion/bash_completion
     elif [ -f /etc/bash_completion ]; then
         . /etc/bash_completion
+    elif [ -f /usr/local/etc/bash_completion ]; then
+        . /usr/local/etc/bash_completion
     fi
 fi
 
