@@ -54,8 +54,8 @@ set noerrorbells                        " don't beep
 set nobackup
 set noswapfile
 syntax on
-set list                                        " highlight whitespaces
-set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¬ " highlight whitespaces
+set list                                " highlight whitespaces
+set listchars=tab:→\ ,trail:·,precedes:«,extends:» " highlight whitespaces
 set wildmenu                            " show command completion matches highlights
 set virtualedit=all                     " allow the cursor to go in to "invalid" places
 set clipboard=unnamed                   " alias unnamed register to the + register, which is the X Window clipboard
