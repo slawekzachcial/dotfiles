@@ -1,0 +1,31 @@
+[include]
+    # Capture in the file below environment-specific configurations
+    path = ~/.local-gitconfig
+[user]
+    name = "Slawek Zachcial"
+[color]
+    ui = auto
+[alias]
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(cyan)<%an>%Creset' --abbrev-commit --date=relative
+    lg1 = log --oneline
+[core]
+    autocrlf = input
+    excludesfile = ~/.gitignore_global
+    filemode = false
+    editor = /usr/bin/vim
+[merge]
+    tool = vimdiff
+    conflictstyle = diff3
+[mergetool]
+    prompt = false
+[difftool]
+    prompt = false
+[svn]
+    rmdir = true
+[push]
+    default = simple
+[credential]
+    helper = cache --timeout 86400
+[http]
+    sslVerify = true
+

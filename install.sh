@@ -47,7 +47,7 @@ else
     git clone https://github.com/chriskempson/base16-shell.git "${DOTFILES}/base16-shell"
 fi
 
-for dotfile in bashrc vimrc tmux.conf inputrc; do
+for dotfile in bashrc vimrc tmux.conf inputrc gitconfig; do
     echo "Processing ${DOTFILES}/${dotfile}..."
     if [ -h "${HOME}/.${dotfile}" ]; then
         if [ "${HOME}/.${dotfile}" -ef "${DOTFILES}/${dotfile}" ]; then
