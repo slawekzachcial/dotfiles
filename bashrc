@@ -82,5 +82,25 @@ if [ -f ~/.dotfiles/base16-shell/scripts/${BASE16_THEME}-dark.sh ]; then
     . ~/.dotfiles/base16-shell/scripts/${BASE16_THEME}-dark.sh
 fi
 
+# Start SSH-agent
+export SSH_AUTH_SOCK=/tmp/.ssh-socket
+
+# ssh-agent automated start
+ssh-add -l &>/dev/null
+
+if [[ $? = 2 ]]; then
+
+    # Delete the socket file in case the agent was not shutdown correctly
+    rm -f ${SSH_AUTH_SOCK}
+
+    # Exit status 2 means couldn't connect to ssh-agent; start one now
+    ssh-agent -a ${SSH_AUTH_SOCK} >/tmp/.ssh-script
+    . /tmp/.ssh-script
+    echo ${SSH_AGENT_PID} >/tmp/.ssh-agent-pid
+
+    # Add my private key
+    ssh-add ${HOME}/.ssh/id_rsa
+fi
+
 # launch tmux if not already in
 [ -n "$TMUX" ] || exec tmux -u new-session -A -s Tmux
