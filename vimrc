@@ -75,6 +75,7 @@ set encoding=utf8
 let base16colorspace=256
 set t_Co=256
 colorscheme base16-default-dark
+highlight CursorLineNr cterm=none ctermfg=20
 " }}}
 
 " Lightline {{{
