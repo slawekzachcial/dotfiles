@@ -1,28 +1,36 @@
 :scriptencoding utf-8
+
 set nocompatible              " be iMproved
 
-" Auto-install Plug
-if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+let s:full_config = filereadable(expand($MYVIMRC))
+
+if s:full_config
+    " Auto-install Plug
+    if empty(glob('~/.vim/autoload/plug.vim'))
+        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
+
+    " Plug {{{
+    call plug#begin('~/.vim/bundle')
+
+    Plug 'airblade/vim-gitgutter'
+    Plug 'chriskempson/base16-vim'
+    Plug 'christoomey/vim-tmux-navigator'
+    Plug 'itchyny/lightline.vim'
+    Plug 'junegunn/fzf'
+    Plug 'junegunn/fzf.vim'
+    Plug 'sheerun/vim-polyglot'
+    Plug 'tpope/vim-commentary'
+    Plug 'tpope/vim-unimpaired'
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'zxqfl/tabnine-vim'
+    " Plug 'ludovicchabant/vim-gutentags'
+
+    call plug#end()
+    " }}}
 endif
-
-" Plug {{{
-call plug#begin('~/.vim/bundle')
-
-Plug 'airblade/vim-gitgutter'
-Plug 'chriskempson/base16-vim'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'itchyny/lightline.vim'
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
-Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-unimpaired'
-
-call plug#end()
-" }}}
 
 " Configurations that follow are based on http://nvie.com/posts/how-i-boosted-my-vim/
 
@@ -66,29 +74,35 @@ set laststatus=2                        " status line always visible
 set spelllang=en_us                     " set the locale for spell check
 set number relativenumber               " turn on hybrid line numbers
 
+set t_ut=
+
 " CTRL-B to switch to alternative buffer as CTRL-^ does not work on all
 " terminals (e.g. Microsoft Terminal)
 nnoremap <C-b> :edit #<CR>
 
-" Base16 Color Scheme {{{
-set encoding=utf8
-let base16colorspace=256
-set t_Co=256
-colorscheme base16-default-dark
-highlight CursorLineNr cterm=none ctermfg=20
-" }}}
+if s:full_config
+    " Base16 Color Scheme {{{
+    set encoding=utf8
+    let base16colorspace=256
+    set t_Co=256
+    colorscheme base16-default-dark
+    highlight CursorLineNr cterm=none ctermfg=20
+    " }}}
 
-" Lightline {{{
-set noshowmode
-" }}}
+    " Lightline {{{
+    set noshowmode
+    " }}}
 
-" FZF {{{
-nnoremap <Leader><Leader> :Buffers<CR>
-nnoremap <Leader>f :Files<CR>
-" Search for the word under cursor
-nnoremap <Leader>s :Ag<Space><C-R>=expand('<cword>')<CR><CR>
-" Search for the visually selected text
-vnoremap <Leader>s y:Ag<Space><C-R>=escape(@", '"*?()[]{}.')<CR><CR>
-" Run Ag
-nnoremap <Leader>a :Ag<Space>
-" }}}
+    " FZF {{{
+    nnoremap <Leader><Leader> :Buffers<CR>
+    nnoremap <Leader>f :Files<CR>
+    " Search for the word under cursor
+    nnoremap <Leader>s :Ag<Space><C-R>=expand('<cword>')<CR><CR>
+    " Search for the visually selected text
+    vnoremap <Leader>s y:Ag<Space><C-R>=escape(@", '"*?()[]{}.')<CR><CR>
+    " Run Ag
+    nnoremap <Leader>a :Ag<Space>
+    " }}}
+else
+    colorscheme darkblue
+endif
