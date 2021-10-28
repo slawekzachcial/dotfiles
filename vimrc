@@ -26,6 +26,8 @@ if s:full_config
     Plug 'tpope/vim-unimpaired'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'zxqfl/tabnine-vim'
+    Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
     " Plug 'ludovicchabant/vim-gutentags'
 
     call plug#end()
