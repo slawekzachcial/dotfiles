@@ -29,7 +29,7 @@
 [http]
     sslVerify = true
 
-[color "diff"]
-	whitespace = red reverse
-[diff]
-	wsErrorHighlight = all
+# [color "diff"]
+# 	whitespace = red reverse
+# [diff]
+# 	wsErrorHighlight = all

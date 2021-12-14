@@ -15,13 +15,20 @@ function __prompt_command {
     if [ "${lastExitCode}" -ne 0 ]; then
         ps1ExitCode="\[\033[0;31m\](${lastExitCode})\[\033[00m\]"
     fi
+    local k8s="$(kubectl config current-context)"
+    if [ "${k8s}" == "kube.platformdxc-mg.com" ]; then
+        k8s=" \[\033[0;41m\] k8s=PRODUCTION \[\033[00m\]"
+    else
+        k8s=""
+    fi
 
     # See /usr/lib/git-core/git-sh-prompt for details about __git_ps1
     export GIT_PS1_SHOWUPSTREAM=verbose
     export GIT_PS1_SHOWDIRTYSTATE=1
     export GIT_PS1_SHOWSTASHSTATE=1
     export GIT_PS1_SHOWCOLORHINTS=1
-    __git_ps1 "\n\[\033[01;34m\]\w\[\033[00m\]" "\n${ps1ExitCode}\$ "
+    __git_ps1 "\n\[\033[01;34m\]\w\[\033[00m\]" "${k8s}\n${ps1ExitCode}"$' \u03bb '
+    # __git_ps1 "\n\[\033[01;34m\]\w\[\033[00m\]" "${k8s}\n${ps1ExitCode}\$ "
 }
 export PROMPT_COMMAND=__prompt_command
 
@@ -101,6 +108,7 @@ if [ -r ${HOME}/.ssh/id_rsa ]; then
 
         # Add my private key
         ssh-add ${HOME}/.ssh/id_rsa
+        ssh-add ${HOME}/.ssh/slawek-zachcial-4096.id_rsa
     fi
 fi
 
