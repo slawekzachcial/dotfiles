@@ -16,12 +16,27 @@ function __prompt_command {
         ps1ExitCode="\[\033[0;31m\](${lastExitCode})\[\033[00m\]"
     fi
 
+    local pyvenv=""
+    if [ -n "${VIRTUAL_ENV}" ]; then
+        pyvenv=" (\[\033[01;32m\]py\[\033[00m\] $(basename "${VIRTUAL_ENV}"))"
+    fi
+
+    local k8s=""
+    local k8sContext="$(basename $(kubectl config current-context))"
+    if [ -n "${k8sContext}" ]; then
+        if [[ "${k8sContext}" == *"pro"* ]]; then
+            k8sContext="\[\033[0;41m\]${k8sContext}\[\033[00m\]"
+        fi
+        k8s=" (\[\033[01;32m\]k8s\[\033[00m\] ${k8sContext})"
+    fi
+
     # See /usr/lib/git-core/git-sh-prompt for details about __git_ps1
     export GIT_PS1_SHOWUPSTREAM=verbose
     export GIT_PS1_SHOWDIRTYSTATE=1
     export GIT_PS1_SHOWSTASHSTATE=1
     export GIT_PS1_SHOWCOLORHINTS=1
-    __git_ps1 "\n\[\033[01;34m\]\w\[\033[00m\]" "\n${ps1ExitCode}\$ "
+    # __git_ps1 "\n\[\033[01;34m\]\w\[\033[00m\]" "\n${ps1ExitCode}\$ "
+    __git_ps1 "\n\[\033[01;34m\]\w\[\033[00m\]" "${k8s}${pyvenv}\n${ps1ExitCode}"$' \u03bb '
 }
 export PROMPT_COMMAND=__prompt_command
 
@@ -82,7 +97,8 @@ if [ -f ~/.dotfiles/base16-shell/scripts/${BASE16_THEME}-dark.sh ]; then
     . ~/.dotfiles/base16-shell/scripts/${BASE16_THEME}-dark.sh
 fi
 
-if [ -r ${HOME}/.ssh/id_rsa ]; then
+# if [ -r ${HOME}/.ssh/id_rsa ]; then
+if [[ -r ${HOME}/.ssh/id_ed25519 || -r ${HOME}/.ssh/id_rsa ]]; then
     # Start SSH-agent
     export SSH_AUTH_SOCK=/tmp/.ssh-socket
 
@@ -100,9 +116,12 @@ if [ -r ${HOME}/.ssh/id_rsa ]; then
         echo ${SSH_AGENT_PID} >/tmp/.ssh-agent-pid
 
         # Add my private key
-        ssh-add ${HOME}/.ssh/id_rsa
+        [ -r ${HOME}/.ssh/id_rsa ]     && ssh-add ${HOME}/.ssh/id_rsa     || /bin/true
+        [ -r ${HOME}/.ssh/id_ed25519 ] && ssh-add ${HOME}/.ssh/id_ed25519 || /bin/true
     fi
 fi
 
 # launch tmux if not already in
 [ -n "$TMUX" ] || exec tmux -u new-session -A -s Tmux
+
+complete -C /usr/bin/terraform terraform
