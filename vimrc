@@ -279,6 +279,7 @@ if s:full_config
 
     " Automatically format Terraform files
     autocmd BufWritePre *.tf TerraformFmt
+    autocmd BufWritePre terragrunt.hcl TerraformFmt
 else
     colorscheme darkblue
 endif
@@ -294,6 +295,9 @@ endif
 
 " Set proper filetype for YAML
 au BufRead,BufNewFile *.yaml set filetype=yaml
+
+" Load Terragrunt files as Terraform
+au! BufNewFile,BufRead terragrunt.hcl set filetype=terraform syntax=terraform
 
 " Json2Yaml command
 command -range Json2Yaml <line1>,<line2>!yq -P '.'
